@@ -17,6 +17,8 @@ SRCS = srcs/check_input.c\
 	srcs/routine.c\
 	srcs/timing.c\
 	srcs/utils_prog.c\
+	srcs/supervisor.c\
+	srcs/utils_philo.c
 
 OBJS = ${SRCS:.c=.o}
 

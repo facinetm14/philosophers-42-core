@@ -24,28 +24,30 @@
 
 typedef struct s_fork
 {
-	int	id;
-	int	status;
+	int				id;
+	int				status;
+	pthread_mutex_t	m_fork;
 }				t_fork;
 typedef struct s_philo
 {
 	int		id;
-	int		tt_die;
-	int		tt_eat;
-	int		tt_sleep;
+	long	tt_die;
+	long	tt_eat;
+	long	tt_sleep;
+	long	tt_think;
 	t_fork	*l_fork;
 	t_fork	*r_fork;
 	int		nbt_eat;
-	int		last_eat;
+	long		last_eat;
 	int		status;
-	int		start;
+	long	start;
 }				t_philo;
 typedef struct s_prog
 {
 	pthread_t	th_philos[MAX_PHILO];
 	t_fork		forks[MAX_PHILO];
 	t_philo		philos[MAX_PHILO];
-	int			start;
+	long		start;
 	int			inputs[5];
 
 }				t_prog;
@@ -57,12 +59,20 @@ void	ft_parsing(int lenght, char **argv, t_prog *var_prog);
 void	ft_check_input(int argc, char **argv, t_prog *var_prog);
 /* routin.c */
 void	*routine(void *arg);
-void	lunch_philos_runtine(t_prog *var_prog);
+void	lunch_philos_runtine(pthread_t *th_sup, t_prog *var_prog);
 /* timing.c */
-int		get_time_in_ms(void);
+long		get_time_in_ms(void);
 /* utils_prog.c */
 void	ft_asign_forks_to_philos(t_prog *var_prog);
 void	ft_creat_philos_and_forks(t_prog *var_prog);
-void	ft_start_thread_philos(t_prog *var_prog);
+void	ft_start_thread_philos(pthread_t *th_sup, t_prog *var_prog);
+/*supervisor.c*/
+void	lunch_supervisor_routine(pthread_t *th_sup, t_prog *var_prog);
+void	*routine_sup(void *arg);
+/* utils_philo */
+void	eat(t_philo *philo);
+void	take_fork(t_philo *philo);
+void	sleeping(t_philo *philo);
+void	think(t_philo *philo);
 
 #endif

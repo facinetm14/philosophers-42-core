@@ -42,6 +42,11 @@ void	ft_creat_philos_and_forks(t_prog *var_prog)
 	{
 		tmp_philo.id = i + 1;
 		tmp_philo.start = var_prog->start;
+		tmp_philo.tt_die = (long)var_prog->inputs[1];
+		tmp_philo.tt_eat = (long)var_prog->inputs[2];
+		tmp_philo.tt_sleep = (long)var_prog->inputs[3];
+		tmp_philo.nbt_eat = var_prog->inputs[4];
+		tmp_philo.last_eat = tmp_philo.start;
 		tmp_fork.id = i + 1;
 		tmp_fork.status = FREE;
 		var_prog->forks[i] = tmp_fork;
@@ -50,7 +55,7 @@ void	ft_creat_philos_and_forks(t_prog *var_prog)
 	}
 }
 
-void	ft_start_thread_philos(t_prog *var_prog)
+void	ft_start_thread_philos(pthread_t *th_sup, t_prog *var_prog)
 {
 	int	i;
 
@@ -61,10 +66,12 @@ void	ft_start_thread_philos(t_prog *var_prog)
 			&routine, (&var_prog->philos[i]));
 		i++;
 	}
+	lunch_supervisor_routine(th_sup, var_prog);
 	i = 0;
 	while (i < var_prog->inputs[0])
 	{
 		pthread_join(var_prog->th_philos[i], NULL);
 		i++;
 	}
+	pthread_join(*th_sup, NULL);
 }

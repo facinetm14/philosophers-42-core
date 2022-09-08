@@ -15,29 +15,38 @@
 void	*routine(void *arg)
 {
 	t_philo			*philo;
-	pthread_mutex_t	mutex_fork;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_init(&mutex_fork, NULL);
-	pthread_mutex_lock(&mutex_fork);
-	if (!(philo->l_fork->status == FREE && philo->l_fork->status == FREE))
+	while (1)
 	{
-		printf("%d philo %d waiting for fork lf %d - rf %d status (%d - %d)\n", (get_time_in_ms() - philo->start), philo->id, philo->l_fork->id, philo->r_fork->id, philo->l_fork->status, philo->r_fork->status);
-		//usleep(100 * 1000);
+		if (philo->id % 2 != 0)
+			usleep(1000);
+		pthread_mutex_init(&philo->l_fork->m_fork, NULL);
+		pthread_mutex_init(&philo->r_fork->m_fork, NULL);
+		if (philo->l_fork->status == FREE && philo->l_fork->status == FREE)
+		{
+			pthread_mutex_lock(&philo->l_fork->m_fork);
+			pthread_mutex_lock(&philo->r_fork->m_fork);
+			philo->l_fork->status = BUSY;
+			philo->r_fork->status = BUSY;
+			take_fork(philo);
+			eat(philo);
+			pthread_mutex_unlock(&philo->l_fork->m_fork);
+			pthread_mutex_unlock(&philo->r_fork->m_fork);
+			philo->l_fork->status = FREE;
+			philo->r_fork->status = FREE;
+			sleeping(philo);
+			think(philo);
+		}
+		pthread_mutex_destroy(&philo->l_fork->m_fork);
+		pthread_mutex_destroy(&philo->r_fork->m_fork);
 	}
-	if (philo->l_fork->status != BUSY && philo->r_fork->status != BUSY)
-	{
-		philo->l_fork->status = BUSY;
-		philo->r_fork->status = BUSY;
-		printf("%d philo %d has taken fork lf %d - rf %d\n", get_time_in_ms() - philo->start, philo->id, philo->l_fork->id, philo->r_fork->id);
-	}
-	pthread_mutex_unlock(&mutex_fork);
 	return (NULL);
 }
 
-void	lunch_philos_runtine(t_prog *var_prog)
+void	lunch_philos_runtine(pthread_t *th_sup, t_prog *var_prog)
 {
 	ft_creat_philos_and_forks(var_prog);
 	ft_asign_forks_to_philos(var_prog);
-	ft_start_thread_philos(var_prog);
+	ft_start_thread_philos(th_sup, var_prog);
 }

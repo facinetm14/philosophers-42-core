@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   supervisor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/02 03:01:23 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/09/02 03:01:23 by fakouyat         ###   ########.fr       */
+/*   Created: 2022/09/07 15:04:26 by fakouyat          #+#    #+#             */
+/*   Updated: 2022/09/07 15:04:26 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
-int	main(int argc, char **argv)
+void	*routine_sup(void *arg)
 {
-	t_prog		var_prog;
-	pthread_t	sup_visor;
+	t_prog	*v_prog;
 
-	ft_check_input(argc, argv, &var_prog);
-	var_prog.start = get_time_in_ms();
-	lunch_philos_runtine(&sup_visor, &var_prog);
-	return (0);
+	v_prog = (t_prog *)arg;
+	(void)v_prog;
+	//printf("number of philo is : %d\n", v_prog->inputs[0]);
+	return (NULL);
+}
+
+void	lunch_supervisor_routine(pthread_t *th_sup, t_prog *var_prog)
+{
+	pthread_create(th_sup, NULL, &routine_sup, var_prog);
 }
