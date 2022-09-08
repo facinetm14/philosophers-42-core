@@ -28,6 +28,9 @@ all : $(NAME)
 
 $(NAME) :
 	$(CC) $(CFLAGS) main.c $(SRCS) -o $(NAME)
+	
+debug : 
+	$(CC) $(CFLAGS) -fsanitize=thread -g main.c $(SRCS) -o $(NAME)
 
 clean :
 	rm -rf $(OBJS)

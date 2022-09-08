@@ -15,31 +15,35 @@
 void	*routine(void *arg)
 {
 	t_philo			*philo;
+	int				has_eaten;
 
+	has_eaten = 0;
 	philo = (t_philo *)arg;
 	while (1)
 	{
 		if (philo->id % 2 != 0)
 			usleep(1000);
-		pthread_mutex_init(&philo->l_fork->m_fork, NULL);
-		pthread_mutex_init(&philo->r_fork->m_fork, NULL);
-		if (philo->l_fork->status == FREE && philo->l_fork->status == FREE)
+		pthread_mutex_lock(&philo->l_fork->m_fork);
+		if (philo->l_fork->status == FREE && philo->r_fork->status == FREE)
 		{
-			pthread_mutex_lock(&philo->l_fork->m_fork);
-			pthread_mutex_lock(&philo->r_fork->m_fork);
 			philo->l_fork->status = BUSY;
+			pthread_mutex_lock(&philo->r_fork->m_fork);
 			philo->r_fork->status = BUSY;
 			take_fork(philo);
 			eat(philo);
-			pthread_mutex_unlock(&philo->l_fork->m_fork);
-			pthread_mutex_unlock(&philo->r_fork->m_fork);
+			has_eaten = 1;
 			philo->l_fork->status = FREE;
 			philo->r_fork->status = FREE;
+			pthread_mutex_unlock(&philo->r_fork->m_fork);
+
+		}
+		pthread_mutex_unlock(&philo->l_fork->m_fork);
+		if (has_eaten == 1)
+		{
 			sleeping(philo);
 			think(philo);
+			has_eaten = 0;
 		}
-		pthread_mutex_destroy(&philo->l_fork->m_fork);
-		pthread_mutex_destroy(&philo->r_fork->m_fork);
 	}
 	return (NULL);
 }

@@ -66,6 +66,7 @@ long		get_time_in_ms(void);
 void	ft_asign_forks_to_philos(t_prog *var_prog);
 void	ft_creat_philos_and_forks(t_prog *var_prog);
 void	ft_start_thread_philos(pthread_t *th_sup, t_prog *var_prog);
+void	ft_destroy_mutexes(t_prog *v_prog);
 /*supervisor.c*/
 void	lunch_supervisor_routine(pthread_t *th_sup, t_prog *var_prog);
 void	*routine_sup(void *arg);

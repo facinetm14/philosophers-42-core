@@ -20,5 +20,6 @@ int	main(int argc, char **argv)
 	ft_check_input(argc, argv, &var_prog);
 	var_prog.start = get_time_in_ms();
 	lunch_philos_runtine(&sup_visor, &var_prog);
+	ft_destroy_mutexes(&var_prog);
 	return (0);
 }

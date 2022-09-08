@@ -23,14 +23,16 @@ void	eat(t_philo *philo)
 	{
 		usleep(50);
 	}
+	philo->l_fork->status = FREE;
+	philo->r_fork->status = FREE;
 }
 
 void	take_fork(t_philo *philo)
 {
-	printf("%10ld philo %d has taken a fork\n",
-		get_time_in_ms() - philo->start, philo->id);
-	printf("%10ld philo %d has taken a fork\n",
-		get_time_in_ms() - philo->start, philo->id);
+	printf("%10ld philo %d has taken a fork %d\n",
+		get_time_in_ms() - philo->start, philo->id, philo->l_fork->id);
+	printf("%10ld philo %d has taken a fork %d\n",
+		get_time_in_ms() - philo->start, philo->id, philo->r_fork->id);
 }
 
 void	sleeping(t_philo *philo)
