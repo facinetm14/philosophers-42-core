@@ -25,12 +25,27 @@ void	*routine_sup(void *arg)
 	{
 		counter[0] = 0;
 		curr_time = get_time_in_ms();
+		if (v_prog->inputs[0] == 1)
+		{
+			counter[1] = 0;
+			while (counter[1] < v_prog->inputs[0] )
+			{
+				pthread_mutex_lock(&v_prog->philos[counter[1]].m_stop);
+				v_prog->philos[counter[1]].end = STOP;
+				pthread_mutex_unlock(&v_prog->philos[counter[1]].m_stop);
+				counter[1] += 1;
+			}
+			printf("%10ld %d has taken a fork\n",
+					get_time_in_ms() - v_prog->philos[0].start, v_prog->philos[0].id);
+				printf("%10ld %d die\n", v_prog->philos[0].tt_die, v_prog->philos[0].id);
+			break ;
+		}
 		while (counter[0] < v_prog->inputs[0])
 		{
 			pthread_mutex_lock(&v_prog->philos[counter[0]].status);
 			diff_time = curr_time - v_prog->philos[counter[0]].last_eat;
 			pthread_mutex_unlock(&v_prog->philos[counter[0]].status);
-			if (diff_time >= v_prog->philos[counter[0]].tt_die || v_prog->inputs[0] == 1)
+			if (diff_time >= v_prog->philos[counter[0]].tt_die)
 			{
 				counter[1] = 0;
 				while (counter[1] < v_prog->inputs[0] )
@@ -40,14 +55,7 @@ void	*routine_sup(void *arg)
 					pthread_mutex_unlock(&v_prog->philos[counter[1]].m_stop);
 					counter[1] += 1;
 				}
-				if (v_prog->inputs[0] == 1)
-				{
-					printf("%10ld %d has taken a fork\n",
-						get_time_in_ms() - v_prog->philos[0].start, v_prog->philos[0].id);
-					printf("%10ld %d die\n", v_prog->philos[0].tt_die, v_prog->philos[0].id);
-				}
-				else
-					printf("%10ld %d die\n", curr_time - v_prog->philos[counter[0]].start, v_prog->philos[counter[0]].id);
+				printf("%10ld %d die\n", curr_time - v_prog->philos[counter[0]].start, v_prog->philos[counter[0]].id);
 				counter[2] = STOP;
 				break ;
 			}
