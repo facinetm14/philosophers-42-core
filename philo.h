@@ -19,7 +19,7 @@
 # include <sys/time.h>
 
 # define MAX_PHILO 201
-# define DEAD 100
+# define STOP 100
 
 typedef struct s_fork
 {
@@ -39,16 +39,17 @@ typedef struct s_philo
 	int				nbt_eat;
 	long			last_eat;
 	pthread_mutex_t	status;
+	pthread_mutex_t	m_stop;
+	long 			end;
 	long			start;
 }				t_philo;
 typedef struct s_prog
 {
-	pthread_t	th_philos[MAX_PHILO];
-	t_fork		forks[MAX_PHILO];
-	t_philo		philos[MAX_PHILO];
-	long		start;
-	int			inputs[5];
-
+	pthread_t		th_philos[MAX_PHILO];
+	t_fork			forks[MAX_PHILO];
+	t_philo			philos[MAX_PHILO];
+	long			start;
+	int				inputs[5];
 }				t_prog;
 
 /* utils.c */

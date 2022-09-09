@@ -14,36 +14,47 @@
 
 void	*routine_sup(void *arg)
 {
-	t_philo	*philo;
+	t_prog	*v_prog;
+	int counter[3];
 	long	curr_time;
 	long	diff_time;
 
-	philo = (t_philo *)arg;
+	counter[2] = 0;
+	v_prog = (t_prog *)arg;
 	while (1)
 	{
+		counter[0] = 0;
 		curr_time = get_time_in_ms();
-		if (philo->id % 2 == 0)
-			usleep(2000);
-		pthread_mutex_lock(&philo->status);
-		diff_time = curr_time - philo->last_eat;
-		pthread_mutex_unlock(&philo->status);
-		if (diff_time >= philo->tt_die)
+		while (counter[0] < v_prog->inputs[0])
 		{
-			printf("%10ld %d dead\n", curr_time - philo->start, philo->id);
-			exit(0);
+			pthread_mutex_lock(&v_prog->philos[counter[0]].status);
+			diff_time = curr_time - v_prog->philos[counter[0]].last_eat;
+			pthread_mutex_unlock(&v_prog->philos[counter[0]].status);
+			if (diff_time >= v_prog->philos[counter[0]].tt_die)
+			{
+				counter[1] = 0;
+				while (counter[1] < v_prog->inputs[0])
+				{
+					pthread_mutex_lock(&v_prog->philos[counter[1]].m_stop);
+					v_prog->philos[counter[1]].end = STOP;
+					pthread_mutex_unlock(&v_prog->philos[counter[1]].m_stop);
+					counter[1] += 1;
+				}
+				printf("%10ld %d die\n", curr_time - v_prog->philos[counter[0]].start, v_prog->philos[counter[0]].id);
+				counter[2] = STOP;
+				break ;
+			}
+			counter[0] += 1;
 		}
+		if (counter[2] == STOP)
+			break;
 	}
+	// if (counter[2] == STOP)
+	// 	printf("%10ld %d die\n", curr_time - v_prog->philos[counter[0]].start, v_prog->philos[counter[0]].id);
 	return (NULL);
 }
 
 void	lunch_supervisor_routine(pthread_t *th_sup, t_prog *var_prog)
 {
-	int i;
-
-	i= 0;
-	while (i < var_prog->inputs[0])
-	{
-		pthread_create(&th_sup[i], NULL, &routine_sup, &var_prog->philos[i]);
-		i++;
-	}
+	pthread_create(th_sup, NULL, &routine_sup, var_prog);
 }
