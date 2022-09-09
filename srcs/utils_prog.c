@@ -40,6 +40,7 @@ void	ft_creat_philos_and_forks(t_prog *var_prog)
 	while (i < var_prog->inputs[0])
 	{
 		tmp_philo.id = i + 1;
+		tmp_philo.status = 0;
 		tmp_philo.start = var_prog->start;
 		tmp_philo.tt_die = (long)var_prog->inputs[1];
 		tmp_philo.tt_eat = (long)var_prog->inputs[2];
@@ -47,7 +48,6 @@ void	ft_creat_philos_and_forks(t_prog *var_prog)
 		tmp_philo.nbt_eat = var_prog->inputs[4];
 		tmp_philo.last_eat = tmp_philo.start;
 		tmp_fork.id = i + 1;
-		tmp_fork.status = FREE;
 		var_prog->forks[i] = tmp_fork;
 		var_prog->philos[i] = tmp_philo;
 		i++;

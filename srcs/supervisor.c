@@ -15,10 +15,11 @@
 void	*routine_sup(void *arg)
 {
 	t_prog	*v_prog;
-
+	//int		i;
+	//int		curr_time;
+	
 	v_prog = (t_prog *)arg;
 	(void)v_prog;
-	//printf("number of philo is : %d\n", v_prog->inputs[0]);
 	return (NULL);
 }
 

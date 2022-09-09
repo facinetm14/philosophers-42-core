@@ -19,13 +19,11 @@
 # include <sys/time.h>
 
 # define MAX_PHILO 201
-# define FREE 0
-# define BUSY 1
+# define DEAD 100
 
 typedef struct s_fork
 {
 	int				id;
-	int				status;
 	pthread_mutex_t	m_fork;
 }				t_fork;
 typedef struct s_philo
@@ -41,6 +39,7 @@ typedef struct s_philo
 	long		last_eat;
 	int		status;
 	long	start;
+	long	dead_at;
 }				t_philo;
 typedef struct s_prog
 {

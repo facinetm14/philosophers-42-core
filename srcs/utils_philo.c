@@ -18,21 +18,19 @@ void	eat(t_philo *philo)
 
 	curr_time = get_time_in_ms();
 	philo->last_eat = curr_time + philo->tt_eat;
-	printf("%10ld philo %d is eating \n", curr_time - philo->start, philo->id);
+	printf("%10ld %d is eating \n", curr_time - philo->start, philo->id);
 	while (get_time_in_ms() < philo->last_eat)
 	{
-		usleep(50);
+		usleep(500);
 	}
-	philo->l_fork->status = FREE;
-	philo->r_fork->status = FREE;
 }
 
 void	take_fork(t_philo *philo)
 {
-	printf("%10ld philo %d has taken a fork %d\n",
-		get_time_in_ms() - philo->start, philo->id, philo->l_fork->id);
-	printf("%10ld philo %d has taken a fork %d\n",
-		get_time_in_ms() - philo->start, philo->id, philo->r_fork->id);
+	printf("%10ld %d has taken a fork\n",
+	get_time_in_ms() - philo->start, philo->id);
+	printf("%10ld %d has taken a fork\n",
+	get_time_in_ms() - philo->start, philo->id);
 }
 
 void	sleeping(t_philo *philo)
@@ -42,10 +40,10 @@ void	sleeping(t_philo *philo)
 
 	curr_time = get_time_in_ms();
 	wake_up = curr_time + philo->tt_sleep;
-	printf("%10ld philo %d is sleeping\n", curr_time - philo->start, philo->id);
+	printf("%10ld %d is sleeping\n", curr_time - philo->start, philo->id);
 	while (get_time_in_ms() < wake_up)
 	{
-		usleep(50);
+		usleep(500);
 	}
 }
 
@@ -55,12 +53,13 @@ void	think(t_philo *philo)
 	long	curr_time;
 
 	curr_time = get_time_in_ms();
+	//if (tt_)
 	philo->tt_think = (philo->tt_die - (
 				curr_time - philo->last_eat) - philo->tt_eat);
 	stop_thinking = philo->tt_think + curr_time;
 	printf("%10ld %d is thinking\n", curr_time - philo->start, philo->id);
 	while (get_time_in_ms() < stop_thinking)
 	{
-		usleep(50);
+		usleep(100);
 	}
 }
