@@ -26,6 +26,7 @@ void	ft_asign_forks_to_philos(t_prog *var_prog)
 		var_prog->philos[i].r_fork = &var_prog->forks[i];
 		// init mutexes
 		pthread_mutex_init(&var_prog->forks[i].m_fork, NULL);
+		pthread_mutex_init(&var_prog->philos[i].status, NULL);
 		i++;
 	}
 }
@@ -40,7 +41,6 @@ void	ft_creat_philos_and_forks(t_prog *var_prog)
 	while (i < var_prog->inputs[0])
 	{
 		tmp_philo.id = i + 1;
-		tmp_philo.status = 0;
 		tmp_philo.start = var_prog->start;
 		tmp_philo.tt_die = (long)var_prog->inputs[1];
 		tmp_philo.tt_eat = (long)var_prog->inputs[2];

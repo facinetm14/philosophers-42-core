@@ -17,7 +17,9 @@ void	eat(t_philo *philo)
 	long	curr_time;
 
 	curr_time = get_time_in_ms();
+	pthread_mutex_lock(&philo->status);
 	philo->last_eat = curr_time + philo->tt_eat;
+	pthread_mutex_unlock(&philo->status);
 	printf("%10ld %d is eating \n", curr_time - philo->start, philo->id);
 	while (get_time_in_ms() < philo->last_eat)
 	{
@@ -55,9 +57,9 @@ void	think(t_philo *philo)
 	curr_time = get_time_in_ms();
 	//if (tt_)
 	philo->tt_think = (philo->tt_die - (
-				curr_time - philo->last_eat) - philo->tt_eat);
+				curr_time - philo->last_eat) - philo->tt_eat) / 2;
 	stop_thinking = philo->tt_think + curr_time;
-	printf("%10ld %d is thinking\n", curr_time - philo->start, philo->id);
+	printf("%10ld %d is thinking for %ld last_meal %ld\n", curr_time - philo->start, philo->id, philo->tt_think, philo->last_eat);
 	while (get_time_in_ms() < stop_thinking)
 	{
 		usleep(100);

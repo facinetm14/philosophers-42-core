@@ -26,20 +26,20 @@ typedef struct s_fork
 	int				id;
 	pthread_mutex_t	m_fork;
 }				t_fork;
+
 typedef struct s_philo
 {
-	int		id;
-	long	tt_die;
-	long	tt_eat;
-	long	tt_sleep;
-	long	tt_think;
-	t_fork	*l_fork;
-	t_fork	*r_fork;
-	int		nbt_eat;
-	long		last_eat;
-	int		status;
-	long	start;
-	long	dead_at;
+	int				id;
+	long			tt_die;
+	long			tt_eat;
+	long			tt_sleep;
+	long			tt_think;
+	t_fork			*l_fork;
+	t_fork			*r_fork;
+	int				nbt_eat;
+	long			last_eat;
+	pthread_mutex_t	status;
+	long			start;
 }				t_philo;
 typedef struct s_prog
 {

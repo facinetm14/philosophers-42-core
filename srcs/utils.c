@@ -91,9 +91,9 @@ void	ft_parsing(int lenght, char **argv, t_prog *var_prog)
 		}
 		i++;
 	}
-	if (var_prog->inputs[0] >= MAX_PHILO + 1)
+	if (var_prog->inputs[0] < 1 || var_prog->inputs[0] >= MAX_PHILO + 1)
 	{
-		printf("Error : too much philoshophers !\n");
+		printf("Error : number of philoshophers must be between 1 and 200 !\n");
 		exit(0);
 	}
 	if (lenght == 5)
