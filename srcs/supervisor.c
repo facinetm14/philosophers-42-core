@@ -15,11 +15,12 @@
 void	*routine_sup(void *arg)
 {
 	t_prog	*v_prog;
-	int counter[2];
+	int 	counter[3];
 	long	curr_time;
 	long	diff_time;
 
 	v_prog = (t_prog *)arg;
+	counter[2] = v_prog->inputs[0];
 	while (1)
 	{
 		curr_time = get_time_in_ms();
@@ -39,8 +40,13 @@ void	*routine_sup(void *arg)
 		{
 			pthread_mutex_lock(&v_prog->philos[counter[0]].status);
 			diff_time = curr_time - v_prog->philos[counter[0]].last_eat;
+			if (v_prog->philos[counter[0]].nbt_eat == 0)
+			{
+				counter[2] -= 1; 
+				v_prog->philos[counter[0]].nbt_eat -= 1;
+			}
 			pthread_mutex_unlock(&v_prog->philos[counter[0]].status);
-			if (diff_time >= v_prog->philos[counter[0]].tt_die)
+			if (diff_time >= v_prog->philos[counter[0]].tt_die || counter[2] == 0)
 			{
 				counter[1] = 0;
 				while (counter[1] < v_prog->inputs[0] )
@@ -50,14 +56,15 @@ void	*routine_sup(void *arg)
 					pthread_mutex_unlock(&v_prog->philos[counter[1]].m_stop);
 					counter[1] += 1;
 				}
+				if (counter[2] == 0)
+					return (NULL);
 				printf("%10ld %d die\n", curr_time - v_prog->philos[counter[0]].start, v_prog->philos[counter[0]].id);
 				return (NULL) ;
 			}
+			
 			counter[0] += 1;
 		}
 	}
-	// if (counter[2] == STOP)
-	// 	printf("%10ld %d die\n", curr_time - v_prog->philos[counter[0]].start, v_prog->philos[counter[0]].id);
 	return (NULL);
 }
 

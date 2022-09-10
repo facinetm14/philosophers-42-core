@@ -19,6 +19,8 @@ void	eat(t_philo *philo)
 	curr_time = get_time_in_ms();
 	pthread_mutex_lock(&philo->status);
 	philo->last_eat = curr_time;
+	if (philo->nbt_eat > 0)
+		philo->nbt_eat -= 1;
 	pthread_mutex_unlock(&philo->status);
 	finish = philo->tt_eat + curr_time;
 	pthread_mutex_lock(&philo->m_stop);
@@ -51,10 +53,10 @@ void	take_fork(t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->m_stop);
-	printf("%10ld %d has taken a fork %d\n",
-	get_time_in_ms() - philo->start, philo->id, philo->l_fork->id);
-	printf("%10ld %d has taken a fork %d\n",
-	get_time_in_ms() - philo->start, philo->id, philo->r_fork->id);
+	printf("%10ld %d has taken a fork\n",
+	get_time_in_ms() - philo->start, philo->id);
+	printf("%10ld %d has taken a fork\n",
+	get_time_in_ms() - philo->start, philo->id);
 }
 
 void	sleeping(t_philo *philo)

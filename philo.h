@@ -40,7 +40,7 @@ typedef struct s_philo
 	long			last_eat;
 	pthread_mutex_t	status;
 	pthread_mutex_t	m_stop;
-	long 			end;
+	long			end;
 	long			start;
 }				t_philo;
 typedef struct s_prog
@@ -61,7 +61,7 @@ void	ft_check_input(int argc, char **argv, t_prog *var_prog);
 void	*routine(void *arg);
 void	lunch_philos_runtine(pthread_t *th_sup, t_prog *var_prog);
 /* timing.c */
-long		get_time_in_ms(void);
+long	get_time_in_ms(void);
 /* utils_prog.c */
 void	ft_asign_forks_to_philos(t_prog *var_prog);
 void	ft_creat_philos_and_forks(t_prog *var_prog);
