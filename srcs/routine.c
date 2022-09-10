@@ -21,41 +21,21 @@ void	*routine(void *arg)
 	{
 		if (philo->id % 2 != 0)
 			usleep(1000);
-		usleep(1000);
 		pthread_mutex_lock(&philo->m_stop);
 		if (philo->end == STOP)
 		{
 			pthread_mutex_unlock(&philo->m_stop);
-			break ;
+			return (NULL);
 		}
 		pthread_mutex_unlock(&philo->m_stop);
 		pthread_mutex_lock(&philo->l_fork->m_fork);
         pthread_mutex_lock(&philo->r_fork->m_fork);
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end != STOP)
-			take_fork(philo);
-		pthread_mutex_unlock(&philo->m_stop);
-		pthread_mutex_lock(&philo->m_stop);
-        if (philo->end != STOP)
-			eat(philo);
-		pthread_mutex_unlock(&philo->m_stop);
-        pthread_mutex_unlock(&philo->r_fork->m_fork);
+		take_fork(philo);
+		eat(philo);
         pthread_mutex_unlock(&philo->l_fork->m_fork);
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end != STOP)
-        	sleeping(philo);
-		pthread_mutex_unlock(&philo->m_stop);
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end != STOP)
-        	think(philo);
-		pthread_mutex_unlock(&philo->m_stop);
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end == STOP)
-		{
-			pthread_mutex_unlock(&philo->m_stop);
-			break ;
-		}
-		pthread_mutex_unlock(&philo->m_stop);
+        pthread_mutex_unlock(&philo->r_fork->m_fork);
+        sleeping(philo);
+        think(philo);
 	}
 	return (NULL);
 }
