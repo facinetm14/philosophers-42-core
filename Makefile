@@ -14,6 +14,7 @@ NAME = philo
 
 SRCS = srcs/check_input.c\
 	srcs/utils.c\
+	srcs/utils_2.c\
 	srcs/routine.c\
 	srcs/timing.c\
 	srcs/utils_prog.c\

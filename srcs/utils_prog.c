@@ -24,7 +24,6 @@ void	ft_asign_forks_to_philos(t_prog *var_prog)
 		else
 			var_prog->philos[i].l_fork = &var_prog->forks[i - 1];
 		var_prog->philos[i].r_fork = &var_prog->forks[i];
-		// init mutexes
 		pthread_mutex_init(&var_prog->forks[i].m_fork, NULL);
 		pthread_mutex_init(&var_prog->philos[i].status, NULL);
 		pthread_mutex_init(&var_prog->philos[i].m_stop, NULL);
@@ -80,7 +79,7 @@ void	ft_start_thread_philos(pthread_t *th_sup, t_prog *var_prog)
 void	ft_destroy_mutexes(t_prog *v_prog)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < v_prog->inputs[0])
 	{

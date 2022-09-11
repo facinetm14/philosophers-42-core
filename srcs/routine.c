@@ -21,13 +21,8 @@ void	*routine(void *arg)
 	{
 		if (philo->id % 2 != 0)
 			usleep(1000);
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end == STOP)
-		{
-			pthread_mutex_unlock(&philo->m_stop);
+		if (ft_continue_routine(philo) == 0)
 			return (NULL);
-		}
-		pthread_mutex_unlock(&philo->m_stop);
 		pthread_mutex_lock(&philo->l_fork->m_fork);
 		pthread_mutex_lock(&philo->r_fork->m_fork);
 		take_fork(philo);

@@ -16,6 +16,7 @@ void	eat(t_philo *philo)
 {
 	long	curr_time;
 	long	finish;
+
 	curr_time = get_time_in_ms();
 	pthread_mutex_lock(&philo->status);
 	philo->last_eat = curr_time;
@@ -23,40 +24,25 @@ void	eat(t_philo *philo)
 		philo->nbt_eat -= 1;
 	pthread_mutex_unlock(&philo->status);
 	finish = philo->tt_eat + curr_time;
-	pthread_mutex_lock(&philo->m_stop);
-	if (philo->end == STOP)
-	{
-		pthread_mutex_unlock(&philo->m_stop);
+	if (ft_continue_routine(philo) == 0)
 		return ;
-	}
-	pthread_mutex_unlock(&philo->m_stop);
 	printf("%10ld %d is eating \n", curr_time - philo->start, philo->id);
 	while (get_time_in_ms() < finish)
 	{
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end == STOP)
-		{
-			pthread_mutex_unlock(&philo->m_stop);
+		if (ft_continue_routine(philo) == 0)
 			return ;
-		}
-		pthread_mutex_unlock(&philo->m_stop);
-		usleep(100);
+		usleep(500);
 	}
 }
 
 void	take_fork(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->m_stop);
-	if (philo->end == STOP)
-	{
-		pthread_mutex_unlock(&philo->m_stop);
+	if (ft_continue_routine(philo) == 0)
 		return ;
-	}
-	pthread_mutex_unlock(&philo->m_stop);
 	printf("%10ld %d has taken a fork\n",
-	get_time_in_ms() - philo->start, philo->id);
+		get_time_in_ms() - philo->start, philo->id);
 	printf("%10ld %d has taken a fork\n",
-	get_time_in_ms() - philo->start, philo->id);
+		get_time_in_ms() - philo->start, philo->id);
 }
 
 void	sleeping(t_philo *philo)
@@ -66,24 +52,14 @@ void	sleeping(t_philo *philo)
 
 	curr_time = get_time_in_ms();
 	wake_up = curr_time + philo->tt_sleep;
-	pthread_mutex_lock(&philo->m_stop);
-	if (philo->end == STOP)
-	{
-		pthread_mutex_unlock(&philo->m_stop);
+	if (ft_continue_routine(philo) == 0)
 		return ;
-	}
-	pthread_mutex_unlock(&philo->m_stop);
 	printf("%10ld %d is sleeping\n", curr_time - philo->start, philo->id);
 	while (get_time_in_ms() < wake_up)
 	{
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end == STOP)
-		{
-			pthread_mutex_unlock(&philo->m_stop);
+		if (ft_continue_routine(philo) == 0)
 			return ;
-		}
-		pthread_mutex_unlock(&philo->m_stop);
-		usleep(100);
+		usleep(500);
 	}
 }
 
@@ -93,16 +69,11 @@ void	think(t_philo *philo)
 	long	curr_time;
 
 	curr_time = get_time_in_ms();
-	pthread_mutex_lock(&philo->m_stop);
-	if (philo->end == STOP)
-	{
-		pthread_mutex_unlock(&philo->m_stop);
+	if (ft_continue_routine(philo) == 0)
 		return ;
-	}
-	pthread_mutex_unlock(&philo->m_stop);
 	pthread_mutex_lock(&philo->status);
 	philo->tt_think = (philo->tt_die - (
-				curr_time - philo->last_eat) - philo->tt_eat) / 2;
+				curr_time - philo->last_eat) - philo->tt_eat) / 2 - 15;
 	if (philo->tt_think < 0)
 		philo->tt_think = 0;
 	if (philo->tt_think > 600)
@@ -112,13 +83,8 @@ void	think(t_philo *philo)
 	printf("%10ld %d is thinking\n", curr_time - philo->start, philo->id);
 	while (get_time_in_ms() < stop_thinking)
 	{
-		pthread_mutex_lock(&philo->m_stop);
-		if (philo->end == STOP)
-		{
-			pthread_mutex_unlock(&philo->m_stop);
+		if (ft_continue_routine(philo) == 0)
 			return ;
-		}
-		pthread_mutex_unlock(&philo->m_stop);
-		usleep(100);
+		usleep(500);
 	}
 }

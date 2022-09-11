@@ -12,57 +12,66 @@
 
 #include "../philo.h"
 
+static int	one_philo_routine(t_prog *v_prog)
+{
+	long	curr_time;
+
+	curr_time = get_time_in_ms();
+	if (v_prog->inputs[0] == 1)
+	{
+		pthread_mutex_lock(&v_prog->philos[0].m_stop);
+		v_prog->philos[0].end = STOP;
+		pthread_mutex_unlock(&v_prog->philos[0].m_stop);
+		printf("%10ld %d has taken a fork\n",
+			curr_time - v_prog->philos[0].start, v_prog->philos[0].id);
+		printf("%10ld %d die\n", v_prog->philos[0].tt_die, v_prog->philos[0].id);
+		return (0);
+	}
+	return (1);
+}
+
+static int	ft_potential_death_or_stop(long diff_time, t_prog *v_prog)
+{
+	if (diff_time >= v_prog->philos[v_prog->count[0]].tt_die
+		|| v_prog->count[2] == 0)
+	{
+		v_prog->count[1] = 0;
+		while (v_prog->count[1] < v_prog->inputs[0])
+		{
+			pthread_mutex_lock(&v_prog->philos[v_prog->count[1]].m_stop);
+			v_prog->philos[v_prog->count[1]].end = STOP;
+			pthread_mutex_unlock(&v_prog->philos[v_prog->count[1]].m_stop);
+			v_prog->count[1] += 1;
+		}
+		if (v_prog->count[2] == 0)
+			return (0);
+		printf("%10ld %d die\n",
+			v_prog->now - v_prog->philos[v_prog->count[0]].start,
+			v_prog->philos[v_prog->count[0]].id);
+		return (0);
+	}
+	return (1);
+}
+
 void	*routine_sup(void *arg)
 {
 	t_prog	*v_prog;
-	int 	counter[3];
-	long	curr_time;
 	long	diff_time;
 
 	v_prog = (t_prog *)arg;
-	counter[2] = v_prog->inputs[0];
+	v_prog->count[2] = v_prog->inputs[0];
+	if (one_philo_routine(v_prog) == 0)
+		return (NULL);
 	while (1)
 	{
-		curr_time = get_time_in_ms();
-		if (v_prog->inputs[0] == 1)
+		v_prog->now = get_time_in_ms();
+		v_prog->count[0] = 0;
+		while (v_prog->count[0] < v_prog->inputs[0])
 		{
-	
-			pthread_mutex_lock(&v_prog->philos[0].m_stop);
-			v_prog->philos[0].end = STOP;
-			pthread_mutex_unlock(&v_prog->philos[0].m_stop);
-			printf("%10ld %d has taken a fork\n",
-					curr_time - v_prog->philos[0].start, v_prog->philos[0].id);
-				printf("%10ld %d die\n", v_prog->philos[0].tt_die, v_prog->philos[0].id);
-			return (NULL) ;
-		}
-		counter[0] = 0;
-		while (counter[0] < v_prog->inputs[0])
-		{
-			pthread_mutex_lock(&v_prog->philos[counter[0]].status);
-			diff_time = curr_time - v_prog->philos[counter[0]].last_eat;
-			if (v_prog->philos[counter[0]].nbt_eat == 0)
-			{
-				counter[2] -= 1; 
-				v_prog->philos[counter[0]].nbt_eat -= 1;
-			}
-			pthread_mutex_unlock(&v_prog->philos[counter[0]].status);
-			if (diff_time >= v_prog->philos[counter[0]].tt_die || counter[2] == 0)
-			{
-				counter[1] = 0;
-				while (counter[1] < v_prog->inputs[0] )
-				{
-					pthread_mutex_lock(&v_prog->philos[counter[1]].m_stop);
-					v_prog->philos[counter[1]].end = STOP;
-					pthread_mutex_unlock(&v_prog->philos[counter[1]].m_stop);
-					counter[1] += 1;
-				}
-				if (counter[2] == 0)
-					return (NULL);
-				printf("%10ld %d die\n", curr_time - v_prog->philos[counter[0]].start, v_prog->philos[counter[0]].id);
-				return (NULL) ;
-			}
-			
-			counter[0] += 1;
+			ft_check_nbt_eaten(&diff_time, v_prog);
+			if (ft_potential_death_or_stop(diff_time, v_prog) == 0)
+				return (NULL);
+			v_prog->count[0] += 1;
 		}
 	}
 	return (NULL);

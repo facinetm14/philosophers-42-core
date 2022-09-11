@@ -12,17 +12,24 @@
 
 #include "../philo.h"
 
-void	ft_check_input(int argc, char **argv, t_prog *var_prog)
+int	ft_check_input(int argc, char **argv, t_prog *var_prog)
 {
+	int	parse;
+
 	if (argc < 5)
 	{
 		printf("Error : few arguments !\n");
-		exit(0);
+		return (0);
 	}
 	if (is_args_int(argc - 1, argv) == 0)
 	{
 		printf("Error : wrong arguments !\n");
-		exit(0);
+		return (0);
 	}
-	ft_parsing(argc, argv, var_prog);
+	parse = ft_parsing(argc, argv, var_prog);
+	if (parse == -1)
+		printf("Error : philosophers should eat at least once !\n");
+	if (parse <= 0)
+		return (0);
+	return (1);
 }

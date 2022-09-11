@@ -76,7 +76,7 @@ static int	ft_atoi(const char *str)
 	return ((int)number * sign);
 }
 
-void	ft_parsing(int lenght, char **argv, t_prog *var_prog)
+int	ft_parsing(int lenght, char **argv, t_prog *var_prog)
 {
 	int	i;
 
@@ -86,16 +86,19 @@ void	ft_parsing(int lenght, char **argv, t_prog *var_prog)
 		var_prog->inputs[i] = ft_atoi(argv[i + 1]);
 		if (var_prog->inputs[i] <= 0 && ft_strlen(argv[i + 1]) != 1)
 		{
-			printf("Error : parsing failled !\n");
-			exit(0);
+			printf("Error : Wrong arguments !\n");
+			return (0);
 		}
 		i++;
 	}
 	if (var_prog->inputs[0] < 1 || var_prog->inputs[0] >= MAX_PHILO + 1)
 	{
 		printf("Error : number of philoshophers must be between 1 and 200 !\n");
-		exit(0);
+		return (0);
 	}
 	if (lenght == 5)
 		var_prog->inputs[4] = -1;
+	if (var_prog->inputs[4] == 0)
+		return (-1);
+	return (1);
 }

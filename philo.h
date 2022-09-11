@@ -50,13 +50,16 @@ typedef struct s_prog
 	t_philo			philos[MAX_PHILO];
 	long			start;
 	int				inputs[5];
+	int				count[3];
+	long			now;
+	pthread_mutex_t	print_mutex;
 }				t_prog;
 
 /* utils.c */
 int		is_args_int(int lenght, char *argv[]);
-void	ft_parsing(int lenght, char **argv, t_prog *var_prog);
+int		ft_parsing(int lenght, char **argv, t_prog *var_prog);
 /* check_input.c */
-void	ft_check_input(int argc, char **argv, t_prog *var_prog);
+int		ft_check_input(int argc, char **argv, t_prog *var_prog);
 /* routin.c */
 void	*routine(void *arg);
 void	lunch_philos_runtine(pthread_t *th_sup, t_prog *var_prog);
@@ -75,5 +78,7 @@ void	eat(t_philo *philo);
 void	take_fork(t_philo *philo);
 void	sleeping(t_philo *philo);
 void	think(t_philo *philo);
-
+/* utils_2 */
+int		ft_continue_routine(t_philo *philo);
+void	ft_check_nbt_eaten(long *diff_time, t_prog *v_prog);
 #endif
