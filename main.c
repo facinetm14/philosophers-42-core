@@ -19,6 +19,7 @@ int	main(int argc, char **argv)
 
 	if (ft_check_input(argc, argv, &var_prog) == 0)
 		return (0);
+	pthread_mutex_init(&var_prog.print_mutex, NULL);
 	lunch_philos_runtine(sup_visor, &var_prog);
 	ft_destroy_mutexes(&var_prog);
 	return (0);

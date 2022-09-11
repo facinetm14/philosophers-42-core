@@ -62,6 +62,7 @@ void	ft_start_thread_philos(pthread_t *th_sup, t_prog *var_prog)
 	{
 		var_prog->philos[i].start = var_prog->start;
 		var_prog->philos[i].last_eat = var_prog->start;
+		var_prog->philos[i].print_mutex = &var_prog->print_mutex;
 		pthread_create(&(var_prog->th_philos[i]), NULL,
 			&routine, (&var_prog->philos[i]));
 		i++;
@@ -88,4 +89,5 @@ void	ft_destroy_mutexes(t_prog *v_prog)
 		pthread_mutex_destroy(&v_prog->philos[i].m_stop);
 		i++;
 	}
+	pthread_mutex_destroy(&v_prog->print_mutex);
 }

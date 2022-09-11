@@ -27,8 +27,8 @@ void	*routine(void *arg)
 		pthread_mutex_lock(&philo->r_fork->m_fork);
 		take_fork(philo);
 		eat(philo);
-		pthread_mutex_unlock(&philo->l_fork->m_fork);
 		pthread_mutex_unlock(&philo->r_fork->m_fork);
+		pthread_mutex_unlock(&philo->l_fork->m_fork);
 		sleeping(philo);
 		think(philo);
 	}

@@ -20,6 +20,7 @@
 
 # define MAX_PHILO 201
 # define STOP 100
+# define TIME_LOST 50
 
 typedef struct s_fork
 {
@@ -40,6 +41,7 @@ typedef struct s_philo
 	long			last_eat;
 	pthread_mutex_t	status;
 	pthread_mutex_t	m_stop;
+	pthread_mutex_t	*print_mutex;
 	long			end;
 	long			start;
 }				t_philo;

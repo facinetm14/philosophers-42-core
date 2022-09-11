@@ -26,7 +26,9 @@ void	eat(t_philo *philo)
 	finish = philo->tt_eat + curr_time;
 	if (ft_continue_routine(philo) == 0)
 		return ;
+	pthread_mutex_lock(philo->print_mutex);
 	printf("%10ld %d is eating \n", curr_time - philo->start, philo->id);
+	pthread_mutex_unlock(philo->print_mutex);
 	while (get_time_in_ms() < finish)
 	{
 		if (ft_continue_routine(philo) == 0)
@@ -39,10 +41,12 @@ void	take_fork(t_philo *philo)
 {
 	if (ft_continue_routine(philo) == 0)
 		return ;
+	pthread_mutex_lock(philo->print_mutex);
 	printf("%10ld %d has taken a fork\n",
 		get_time_in_ms() - philo->start, philo->id);
 	printf("%10ld %d has taken a fork\n",
 		get_time_in_ms() - philo->start, philo->id);
+	pthread_mutex_unlock(philo->print_mutex);
 }
 
 void	sleeping(t_philo *philo)
@@ -54,7 +58,9 @@ void	sleeping(t_philo *philo)
 	wake_up = curr_time + philo->tt_sleep;
 	if (ft_continue_routine(philo) == 0)
 		return ;
+	pthread_mutex_lock(philo->print_mutex);
 	printf("%10ld %d is sleeping\n", curr_time - philo->start, philo->id);
+	pthread_mutex_unlock(philo->print_mutex);
 	while (get_time_in_ms() < wake_up)
 	{
 		if (ft_continue_routine(philo) == 0)
@@ -79,8 +85,10 @@ void	think(t_philo *philo)
 	if (philo->tt_think > 600)
 		philo->tt_think = 200;
 	stop_thinking = philo->tt_think + curr_time;
-	printf("%10ld %d is thinking\n", curr_time - philo->start, philo->id);
 	pthread_mutex_unlock(&philo->status);
+	pthread_mutex_lock(philo->print_mutex);
+	printf("%10ld %d is thinking\n", curr_time - philo->start, philo->id);
+	pthread_mutex_unlock(philo->print_mutex);
 	while (get_time_in_ms() < stop_thinking)
 	{
 		if (ft_continue_routine(philo) == 0)
