@@ -19,7 +19,7 @@ void	eat(t_philo *philo)
 
 	curr_time = get_time_in_ms();
 	pthread_mutex_lock(&philo->status);
-	philo->last_eat = curr_time;
+	philo->last_eat = get_time_in_ms();
 	if (philo->nbt_eat > 0)
 		philo->nbt_eat -= 1;
 	pthread_mutex_unlock(&philo->status);
@@ -73,14 +73,14 @@ void	think(t_philo *philo)
 		return ;
 	pthread_mutex_lock(&philo->status);
 	philo->tt_think = (philo->tt_die - (
-				curr_time - philo->last_eat) - philo->tt_eat) / 2 - 15;
+				get_time_in_ms() - philo->last_eat) - philo->tt_eat) / 2;
 	if (philo->tt_think < 0)
 		philo->tt_think = 0;
 	if (philo->tt_think > 600)
 		philo->tt_think = 200;
-	pthread_mutex_unlock(&philo->status);
 	stop_thinking = philo->tt_think + curr_time;
 	printf("%10ld %d is thinking\n", curr_time - philo->start, philo->id);
+	pthread_mutex_unlock(&philo->status);
 	while (get_time_in_ms() < stop_thinking)
 	{
 		if (ft_continue_routine(philo) == 0)

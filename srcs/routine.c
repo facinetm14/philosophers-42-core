@@ -39,5 +39,6 @@ void	lunch_philos_runtine(pthread_t *th_sup, t_prog *var_prog)
 {
 	ft_creat_philos_and_forks(var_prog);
 	ft_asign_forks_to_philos(var_prog);
+	var_prog->start = get_time_in_ms();
 	ft_start_thread_philos(th_sup, var_prog);
 }

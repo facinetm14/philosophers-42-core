@@ -32,7 +32,7 @@ static int	one_philo_routine(t_prog *v_prog)
 
 static int	ft_potential_death_or_stop(long diff_time, t_prog *v_prog)
 {
-	if (diff_time >= v_prog->philos[v_prog->count[0]].tt_die
+	if (diff_time - 22 >= v_prog->philos[v_prog->count[0]].tt_die
 		|| v_prog->count[2] == 0)
 	{
 		v_prog->count[1] = 0;
@@ -46,7 +46,7 @@ static int	ft_potential_death_or_stop(long diff_time, t_prog *v_prog)
 		if (v_prog->count[2] == 0)
 			return (0);
 		printf("%10ld %d die\n",
-			v_prog->now - v_prog->philos[v_prog->count[0]].start,
+			v_prog->now - v_prog->philos[v_prog->count[0]].start - 22,
 			v_prog->philos[v_prog->count[0]].id);
 		return (0);
 	}

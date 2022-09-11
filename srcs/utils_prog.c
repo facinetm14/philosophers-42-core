@@ -42,12 +42,10 @@ void	ft_creat_philos_and_forks(t_prog *var_prog)
 	{
 		tmp_philo.id = i + 1;
 		tmp_philo.end = 0;
-		tmp_philo.start = var_prog->start;
 		tmp_philo.tt_die = (long)var_prog->inputs[1];
 		tmp_philo.tt_eat = (long)var_prog->inputs[2];
 		tmp_philo.tt_sleep = (long)var_prog->inputs[3];
 		tmp_philo.nbt_eat = var_prog->inputs[4];
-		tmp_philo.last_eat = tmp_philo.start;
 		tmp_fork.id = i + 1;
 		var_prog->forks[i] = tmp_fork;
 		var_prog->philos[i] = tmp_philo;
@@ -62,6 +60,8 @@ void	ft_start_thread_philos(pthread_t *th_sup, t_prog *var_prog)
 	i = 0;
 	while (i < var_prog->inputs[0])
 	{
+		var_prog->philos[i].start = var_prog->start;
+		var_prog->philos[i].last_eat = var_prog->start;
 		pthread_create(&(var_prog->th_philos[i]), NULL,
 			&routine, (&var_prog->philos[i]));
 		i++;
